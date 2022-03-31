@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fighter game</title>
+    <link rel="icon" href="yap.png">
+    <link rel="stylesheet" href="background.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+
+<body>
+<div style="position: relative; display: inline-block">
+
+    <div style="position: absolute; display: flex; width: 100%; align-items: center; padding: 20px">
+        <div id="playerHealth" style="background-color: yellow; height: 30px; width: 100%"></div>
+        <div id="timer" style="background-color: red; width: 100px; height: 100px; flex-shrink: 0;"></div>
+
+        <div style="position: relative; height: 30px; width: 100%">
+            <div id="enemyHealth" style="background-color: yellow; height: 30px"></div>
+            <div style="position: absolute; background-color: blue;"></div>
+        </div>
+    </div>
+    <canvas></canvas>
+</div>
+    <script src="index.js"></script>
+</body>
+
+</html>
