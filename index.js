@@ -62,20 +62,27 @@ const player = new Fighter({
             imageSrc: './img/samuraiMack/Attack1.png',
             framesMax: 6,
         },
+        takeHit: {
+            imageSrc: './img/samuraiMack/Take hit - white silhouette.png',
+            framesMax: 4,
+        },
+        death: {
+            imageSrc: './img/samuraiMack/Death.png',
+            framesMax: 6,
+        }
     }
 })
 
 const enemy = new Fighter({
     position: {
         x: 400,
-        y: 100
+        y: 0
     },
     velocity: {
         x: 0,
         y: 0
     },
     color: 'blue',
-
     imageSrc: './img/kenji/idle.png',
     framesMax: 4,
     scale: 2.5,
@@ -104,6 +111,14 @@ const enemy = new Fighter({
             imageSrc: './img/kenji/Attack1.png',
             framesMax: 4,
         },
+        takeHit: {
+            imageSrc: './img/kenji/Take hit.png',
+            framesMax: 3,
+        },
+        death: {
+            imageSrc: './img/kenji/Death.png',
+            framesMax: 7,
+        }
     }
 })
 
@@ -179,21 +194,37 @@ function animate() {
 
     //detect for collision
     if (
-        rectangularCollision({rectangle1: player, rectangle2: enemy}) &&
+        player.attackBox.position.x + 220 >= enemy.position.x &&
+        player.attackBox.position.x <= enemy.position.x + enemy.width &&
+        player.attackBox.position.y + player.attackBox.height >= enemy.position.y &&
+        player.attackBox.position.y <= enemy.position.y + enemy.height &&
         player.isAttacking
     ) {
+        enemy.takeHit()
         player.isAttacking = false
-        enemy.health -= 20
         document.querySelector("#enemyHealth").style.width = enemy.health + '%'
     }
 
+    // if player misses
+    if (player.isAttacking && player.frameCurrent === 4) {
+        player.isAttacking = false
+    }
+
+
     if (
-        rectangularCollision({rectangle1: enemy, rectangle2: player}) &&
+        enemy.attackBox.position.x + 220 >= player.position.x &&
+        enemy.attackBox.position.x <= player.position.x + player.width &&
+        enemy.attackBox.position.y + enemy.attackBox.height >= player.position.y &&
+        enemy.attackBox.position.y <= player.position.y + player.height &&
         enemy.isAttacking
     ) {
+        player.takeHit()
         enemy.isAttacking = false
-        player.health -= 20
         document.querySelector("#playerHealth").style.width = player.health + '%'
+    }
+
+    if (enemy.isAttacking && enemy.frameCurrent === 4) {
+        enemy.isAttacking = false
     }
 
     // end game based on health
@@ -205,6 +236,9 @@ function animate() {
 animate()
 
 window.addEventListener('keydown', (event) => {
+    if (!player.dead) {
+
+
     switch (event.key) {
         case 'd':
             keys.d.pressed = true
@@ -220,7 +254,11 @@ window.addEventListener('keydown', (event) => {
         case ' ':
             player.attack()
             break
+        }
+    }
 
+    if (!enemy.dead) {
+    switch (event.key) {
         case 'm':
             keys.m.pressed = true
             enemy.lastKey = 'm'
@@ -235,8 +273,9 @@ window.addEventListener('keydown', (event) => {
         case 'l':
             enemy.attack()
             break
+        }
     }
-    })
+})
 
 window.addEventListener('keyup', (event) => {
     switch (event.key) {

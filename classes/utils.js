@@ -1,11 +1,3 @@
-function rectangularCollision({rectangle1, rectangle2}) {
-    return (
-        rectangle1.attackBox.position.x + rectangle1.attackBox.width >= enemy.position.x &&
-        rectangle1.attackBox.position.x <= rectangle2.position.x + enemy.width &&
-        rectangle1.attackBox.position.y + rectangle1.attackBox.height >= enemy.position.y &&
-        rectangle1.attackBox.position.y <= rectangle2.position.y + enemy.height
-    )
-}
 
 function determineWinner({player, enemy, timerId}) {
     clearTimeout(timerId)
