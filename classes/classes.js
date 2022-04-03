@@ -9,7 +9,7 @@ class Sprite {
         this.framesMax = framesMax
         this.frameCurrent = 0
         this.framesElapsed = 0
-        this.framesHold = 20
+        this.framesHold = 10
         this.offset = offset
     }
     draw() {
@@ -28,7 +28,6 @@ class Sprite {
 
     animateFrames() {
         this.framesElapsed++
-
         if (this.framesElapsed % this.framesHold === 0) {
             if (this.frameCurrent < this.framesMax - 1) {
                 this.frameCurrent++
@@ -53,7 +52,7 @@ class Sprite {
 }
 
 class Fighter extends Sprite {
-    constructor({position, velocity, color = 'red', imageSrc, scale = 1, framesMax = 1, offset = {x: 0, y: 0}}) {
+    constructor({position, velocity, color = 'red', imageSrc, scale = 1, framesMax = 1, offset = {x: 0, y: 0}, Sprites}) {
         super({
             position,
             imageSrc,
@@ -80,7 +79,14 @@ class Fighter extends Sprite {
         this.health = 100
         this.frameCurrent = 0
         this.framesElapsed = 0
-        this.framesHold = 20
+        this.framesHold = 7
+        this.Sprites = Sprites
+
+        for (const sprite in this.Sprites) {
+            Sprites[sprite].image = new Image()
+            Sprites[sprite].image.src = Sprites[sprite].imageSrc
+        }
+
     }
 
 
@@ -95,14 +101,58 @@ class Fighter extends Sprite {
 
         if (this.position.y + this.height + this.velocity.y >= canvas.height - 96) {
             this.velocity.y = 0
+            this.position.y = 330
         } else
             this.velocity.y += gravity
     }
 
     attack() {
+        this.switchSprite('attack1')
         this.isAttacking = true
         setTimeout(() => {
             this.isAttacking = false
         }, 100)
+    }
+
+    switchSprite(Sprite) {
+        if (this.image === this.Sprites.attack1.image && this.frameCurrent < this.Sprites.attack1. framesMax -1) return
+
+        switch (Sprite) {
+            case 'idle':
+                if (this.image !== this.Sprites.idle.image) {
+                    this.image = this.Sprites.idle.image
+                    this.framesMax = this.Sprites.idle.framesMax
+                    this.frameCurrent = 0
+                }
+                break;
+            case 'run':
+                if (this.image !== this.Sprites.run.image) {
+                    this.image = this.Sprites.run.image
+                    this.framesMax = this.Sprites.run.framesMax
+                    this.frameCurrent = 0
+                }
+                break;
+            case 'jump':
+                if (this.image !== this.Sprites.jump.image) {
+                    this.image = this.Sprites.jump.image
+                    this.framesMax = this.Sprites.jump.framesMax
+                    this.frameCurrent = 0
+                }
+                break;
+            case 'fall':
+                if (this.image !== this.Sprites.fall.image) {
+                    this.image = this.Sprites.fall.image
+                    this.framesMax = this.Sprites.fall.framesMax
+                    this.frameCurrent = 0
+                }
+                break;
+            case 'attack1':
+                if (this.image !== this.Sprites.attack1.image) {
+                    this.image = this.Sprites.attack1.image
+                    this.framesMax = this.Sprites.attack1.framesMax
+                    this.frameCurrent = 0
+                }
+                break;
+        }
     }
 }
